@@ -82,11 +82,12 @@ export const toCSV = (data, headers, separator, enclosingCharacter) => {
   throw new TypeError(`Data should be a "String", "Array of arrays" OR "Array of objects" `);
 };
 
-export const buildURI = ((data, uFEFF, headers, separator, enclosingCharacter) => {
+export const buildURI = ((data, uFEFF, headers, separator, enclosingCharacter, addExcelSeparator) => {
   const csv = toCSV(data, headers, separator, enclosingCharacter);
   const type = isSafari() ? 'application/csv' : 'text/csv';
   const blob = new Blob([uFEFF ? '\uFEFF' : '', csv], { type });
-  const dataURI = `data:${type};charset=utf-8,${uFEFF ? '\uFEFF' : ''}${csv}`;
+  const excelSeparator = addExcelSeparator?`sep=${separator}`:""
+  const dataURI = `data:${type};charset=utf-8,${excelSeparator}${uFEFF ? '\uFEFF' : ''}${csv}`;
 
   const URL = window.URL || window.webkitURL;
 
